@@ -2,6 +2,8 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cors = require('cors');
+var passport = require('passport');
+var config = require('./config')[process.env.NODE_ENV];
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -16,10 +18,13 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(cors());
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+require('./src/helpers/AuthenticationService')(passport, config);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
