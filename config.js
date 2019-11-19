@@ -23,6 +23,15 @@ let config = {
     auth: {
       saltRounds: 10,
       secret: "toomuchsauce"
+    },
+    mail: {
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
     }
   },
   production: {
@@ -42,6 +51,15 @@ let config = {
     auth: {
       saltRounds: 10,
       secret: "toomuchsauce"
+    },
+    mail: {
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
     }
   }
 };

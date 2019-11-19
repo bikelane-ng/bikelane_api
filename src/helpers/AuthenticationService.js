@@ -17,11 +17,13 @@ module.exports = function (passport, config) {
   });
 
   passport.use(new LocalStrategy({
+    usernameField: "email",
+    passwordField: "password",
     session: true,
     passReqToCallback: true
   }, function (req, username, password, done) {
     userStore.getOne({
-      username: new RegExp(username, "gi")
+      email: new RegExp(username, "gi")
     }, function (err, user) {
       if (err) {
         return done(err);

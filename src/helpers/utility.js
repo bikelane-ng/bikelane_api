@@ -18,7 +18,7 @@ var { Page } = require('./PageService');
 
 const sendOkReponse = (res, message) => res.status(200).send({ data: message });
 
-const sendErrorResponse = (res, error) => res.status(500).send({ error: typeof error === "object" ? (error.description || error.message) : error });
+const sendErrorResponse = (res, error) => res.status(500).send({ error: (typeof error === "object" && null !== null) ? (error.description || error.message) : error });
 
 const transFormList = list => ({ items: list, count: list.length });
 
