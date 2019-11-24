@@ -32,6 +32,11 @@ const UserSchema = new Schema({
   },
   cipherIv: {
     type: String
+  },
+  role: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: true,
+    ref: "Role"
   }
 });
 

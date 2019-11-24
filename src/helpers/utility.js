@@ -18,7 +18,7 @@ var { Page } = require('./PageService');
 
 const sendOkReponse = (res, message) => res.status(200).send({ data: message });
 
-const sendErrorResponse = (res, error) => res.status(500).send({ error: (typeof error === "object" && null !== null) ? (error.description || error.message) : error });
+const sendErrorResponse = (res, error) => res.status(500).send({ error: (typeof error === "object" && error !== null) ? (error.description || error.message) : error });
 
 const transFormList = list => ({ items: list, count: list.length });
 
@@ -38,6 +38,32 @@ const transformListAndSendResponse = res => (error, list) => {
 const uploadSingle = fieldName => upload.single(fieldName);
 
 const uploadMultiple = (fieldName, maxCount) => upload.array(fieldName, maxCount);
+
+function encrypt(data) {
+  let iv = crypto.randomBytes(32);
+
+  const cipher = crypto.createCipheriv("aes-256-gcm", Buffer.from(config.auth.secret), iv);
+
+  let encryptedData = cipher.update(data);
+
+  encryptedData = Buffer.concat([encryptedData, cipher.final()]).toString("hex");
+
+  return {
+    iv: iv.toString('hex'),
+    encryptedData
+  };
+}
+
+function decrypt(data) {
+  const decipher = crypto.createDecipheriv("aes-256-gcm",
+    Buffer.from(config.auth.secret), Buffer.from(data.iv, 'hex'));
+
+  let decrypted = crypto.update(data.encryptedData);
+
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+  return decrypted.toString();
+}
 
 function isNotFullArguments(arguments, expectedLength) {
   return !(arguments.length >= expectedLength);
@@ -59,5 +85,7 @@ module.exports = {
     single: uploadSingle,
     multiple: uploadMultiple
   },
-  confirmArguments
+  confirmArguments,
+  encrypt,
+  decrypt
 }

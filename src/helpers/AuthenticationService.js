@@ -17,13 +17,13 @@ module.exports = function (passport, config) {
   });
 
   passport.use(new LocalStrategy({
-    usernameField: "email",
+    usernameField: "username",
     passwordField: "password",
     session: true,
     passReqToCallback: true
   }, function (req, username, password, done) {
     userStore.getOne({
-      email: new RegExp(username, "gi")
+      mobile: new RegExp(username, "gi")
     }, function (err, user) {
       if (err) {
         return done(err);
@@ -33,21 +33,7 @@ module.exports = function (passport, config) {
           message: 'Invalid credentials.'
         });
       }
-      if (req && req.body && req.body.socialToken) {
-        let verifyFnMap = {
-          GOOGLE: verifyGoogleToken,
-          FACEBOOK: verifyFacebookToken
-        };
-        return verifyFnMap[req.body.socialType](req.body.socialToken)
-          .then(tokenInfo => {
-            if (tokenInfo.sub !== user.socialId && tokenInfo.user_id !== user.socialId) {
-              return done(null, false, {
-                message: 'Google token mismatch'
-              });
-            }
-            return done(null, user);
-          });
-      }
+
       if (!user.confirmPassword(password)) {
         return done(null, false, {
           message: 'Invalid credentials.'
