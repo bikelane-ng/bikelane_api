@@ -1,4 +1,5 @@
-const store = new (require("../repositories/UserStore"))(),
+const mongoose = require("mongoose"),
+  store = new (require("../repositories/UserStore"))(),
   otpStore = new (require("../repositories/OtpLogStore"))(),
   roleStore = new (require("../repositories/RoleStore"))(),
   utility = require("../helpers/utility"),
@@ -17,6 +18,20 @@ function UserController() {
 
   this.getAll = (req, res) => {
     return this.store.get({}, utility.transformListAndSendResponse(res));
+  };
+
+  this.updateUserLocation = (req, res) => {
+    return this.store.update({ _id: req.user._id }, {
+      recentLocation: {
+        longitude: req.body.longitude,
+        latitude: req.body.latitude
+      }
+    }, utility.sendReponse(res));
+  };
+
+  this.getUserLocation = (req, res) => {
+    const _id = req.query.user ? new mongoose.Types.ObjectId(req.query.user) : req.user._id;
+    return this.store.getOne({ _id }, { fields: ["recentLocation"] }, utility.sendReponse(res));
   };
 
   this.register = action => (req, res) => {

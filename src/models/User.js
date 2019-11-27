@@ -37,6 +37,16 @@ const UserSchema = new Schema({
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
     ref: "Role"
+  },
+  recentLocation: {
+    longitude: {
+      type: String,
+      required: true
+    },
+    latitude: {
+      type: String,
+      required: true
+    }
   }
 });
 
