@@ -10,6 +10,7 @@ var app = require('../app');
 var debug = require('debug')('bikelane:server');
 var http = require('http');
 var mongoose = require("mongoose");
+var socket = require('socket.io');
 var config = (require("../config"))[process.env.NODE_ENV];
 
 /**
@@ -24,6 +25,14 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * socket connections
+ */
+
+var io = socket(server);
+
+require('../src/helpers/SocketService')(io);
 
 /**
  * Listen on provided port, on all network interfaces.
