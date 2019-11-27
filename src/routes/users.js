@@ -8,7 +8,7 @@ router.route('/')
 
 router.get('/:id', userController.getById);
 
-route.get('/location/user'.userController.getUserLocation);
+router.get('/location/user', userController.getUserLocation);
 
 router.put('/location/update', userController.updateUserLocation);
 
