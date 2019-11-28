@@ -40,12 +40,10 @@ const UserSchema = new Schema({
   },
   recentLocation: {
     longitude: {
-      type: String,
-      required: true
+      type: String
     },
     latitude: {
-      type: String,
-      required: true
+      type: String
     }
   }
 });
