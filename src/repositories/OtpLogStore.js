@@ -25,8 +25,12 @@ OtpLogStore.prototype.save = function (doc, options, callback) {
 OtpLogStore.prototype.verifyOtp = function (otp, callback) {
   if (!otp || !callback) return callback(new Error("Otp and Callback are required"));
 
+  if (!otp.code || !otp.mobile) return callback(new Error("Otp code and mobile number are required."));
+
   return this.getOne({ mobile: otp.mobile }, (error, result) => {
     if (error) return callback(error);
+
+    if (!result) return callback(new Error("Could not verify OTP for that mobile number."));
 
     if (otp.code !== result.code) return callback(new Error("Invalid OTP"));
 

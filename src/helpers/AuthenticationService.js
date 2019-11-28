@@ -11,7 +11,7 @@ module.exports = function (passport, config) {
 
   passport.deserializeUser(function (id, done) {
     userStore.getById(id, function (err, user) {
-      if (err) throw err;
+      if (err) return done(err);
       done(null, user);
     });
   });
